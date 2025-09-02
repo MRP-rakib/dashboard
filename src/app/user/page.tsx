@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Container from '@/ui/Container'
+import Container from '../../ui/Container'
 
 
 interface User {

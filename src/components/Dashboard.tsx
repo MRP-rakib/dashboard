@@ -1,6 +1,6 @@
 'use client'
 
-import Container from '@/ui/Container'
+import Container from '../ui/Container'
 import React, { useEffect, useState } from 'react'
 import DataList from './DataList'
 
