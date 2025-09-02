@@ -93,14 +93,14 @@ function DataList({ users }: DataListProps) {
 
       <div className="flex justify-end mt-4 gap-2">
         <button
-          className="py-2 px-4 bg-gray-300 rounded disabled:opacity-50 hover:bg-gray-400 transition-colors text-[14px] lg:text-base"
+          className="py-2 px-4 bg-gray-300 rounded disabled:opacity-50 hover:bg-gray-400 transition-colors text-[14px] lg:text-base cursor-pointer"
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}
         >
           Previous
         </button>
         <button
-          className="py-2 px-4 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition-colors text-[14px] lg:text-base"
+          className="py-2 px-4 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition-colors text-[14px] lg:text-base cursor-pointer"
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((prev) => prev + 1)}
         >

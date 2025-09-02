@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Container from '../ui/Container'
 
 
+
 interface User {
   id: number;
   name: string;
@@ -79,7 +80,7 @@ export default function UserPage() {
                     <div className='flex items-center justify-between'>
                         <Link href="/" className='cursor-pointer'>
                             <button
-                                className="mb-4 py-2 px-4 bg-[#F9FAFB] rounded hover:bg-[#F3F4F6] transition-colors"
+                                className="mb-4 py-2 px-4 bg-[#F9FAFB] rounded hover:bg-[#F3F4F6] transition-colors cursor-pointer"
                                 onClick={handleBackClick}
                             >
                                 Back to Users
