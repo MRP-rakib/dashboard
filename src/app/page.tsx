@@ -5,7 +5,7 @@ function Home() {
   return (
     <div>
       <Container>
-      Home
+        home
       </Container>
     </div>
   )
