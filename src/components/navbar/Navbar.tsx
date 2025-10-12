@@ -26,24 +26,24 @@ function Navbar() {
         <nav className='sticky top-0 left-0 w-full py-4 border-b border-gray-200 dark:border-gray-600 z-50 bg-white dark:bg-[#161C2D]'>
             <Container>
                 <div className='flex items-center justify-between'>
-                    <button onClick={() => dispatch(toggleSidebar())} className='text-[18px] text-[#396CF0] hover:text-white
+                    <button onClick={() => dispatch(toggleSidebar())} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-8 h-8 rounded-full
                      transition-colors duration-300 cursor-pointer'><IoIosMenu />
                     </button>
                     <div className='flex items-center gap-4 lg:gap-6'>
-                        <span onClick={()=>dispatch(toggleTheme())} className='text-[18px] text-[#396CF0] hover:text-white
+                        <span onClick={()=>dispatch(toggleTheme())} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'>{dark?(<CiLight />):(<CiDark />)}
                         </span>
-                        <span className='text-[18px] text-[#396CF0] hover:text-white
+                        <span className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'><IoChatbubblesOutline />
                         </span>
-                        <span className='text-[18px] text-[#396CF0] hover:text-white
+                        <span className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'><MdOutlineEmail />
                         </span>
-                        <span className='text-[18px] text-[#396CF0] hover:text-white
+                        <span className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer overflow-hidden'>
                         <Image src='/profile.jpg' width={36} height={36} alt='profile'/>
