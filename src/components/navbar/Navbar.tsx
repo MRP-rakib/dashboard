@@ -9,6 +9,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import Image from 'next/image';
 import { useEffect} from 'react';
 import { toggleTheme } from '@/redux/darkmodeSlice';
+import { CiLight } from "react-icons/ci";
 function Navbar() {
     const dispatch = useAppDispatch()
      const {dark} = useAppSelector(state=>state.darkmode)
@@ -32,7 +33,7 @@ function Navbar() {
                     <div className='flex items-center gap-4 lg:gap-6'>
                         <span onClick={()=>dispatch(toggleTheme())} className='text-[18px] text-[#396CF0] hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
-                     transition-colors duration-300 cursor-pointer'><CiDark />
+                     transition-colors duration-300 cursor-pointer'>{dark?(<CiLight />):(<CiDark />)}
                         </span>
                         <span className='text-[18px] text-[#396CF0] hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
