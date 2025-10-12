@@ -12,7 +12,7 @@ function Sidebar() {
         <aside className={`${isOpen?'w-full max-w-[250px]  md:max-w-[300px] ':'w-0 max-w-0'}  transition-all duration-300 fixed top-16 z-50
          bg-white dark:bg-[#161C2D] h-screen border
          lg:sticky lg:top-0 left-0 lg:border-r border-gray-200 dark:border-gray-600 overflow-y-auto`}>
-           <div className='py-6 pl-6 lg:border-b lg:border-gray-200'>
+           <div className='py-6 pl-6 lg:border-b lg:border-gray-200 dark:border-gray-600'>
             <Link href='/'>
             {dark?(
                 <Image src='/logo-light.png' width={110} height={60} alt='logo'/>
