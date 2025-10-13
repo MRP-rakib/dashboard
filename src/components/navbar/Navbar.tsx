@@ -12,6 +12,7 @@ import { toggleTheme } from '@/redux/darkmodeSlice';
 import { CiLight } from "react-icons/ci";
 import EmailNotification from '../notifications/EmailNotification';
 import ChatNotification from '../notifications/ChatNotification';
+import Profile from '../profile/Profile'
 
 
 function Navbar() {
@@ -19,17 +20,27 @@ function Navbar() {
      const {dark} = useAppSelector(state=>state.darkmode)
      const [emailNoti,setEmailNoti] = useState<boolean>(false)
      const [chatNoti,setChatNoti] = useState<boolean>(false)
+     const [profile,setProfile] = useState<boolean>(false)
 
      const handelEmailNoti=()=>{
         setEmailNoti(state=>state=!state)
         if(!emailNoti){
             setChatNoti(false)
+            setProfile(false)
         }
      }
      const handelCahtNoti=()=>{
         setChatNoti(state=>state=!state)
         if(!chatNoti){
             setEmailNoti(false)
+            setProfile(false)
+        }
+     }
+     const handelProfile=()=>{
+        setProfile(state=>state=!state)
+        if(!profile){
+            setEmailNoti(false)
+            setChatNoti(false)
         }
      }
      useEffect(()=>{
@@ -67,11 +78,14 @@ function Navbar() {
                         </span>
                         <EmailNotification emailNoti={emailNoti}/>
                         </div>
-                        <span className='text-[18px] text-primary hover:text-white
+                        <div className=' relative'>
+                            <span onClick={handelProfile} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer overflow-hidden'>
                         <Image src='/profile.jpg' width={36} height={36} alt='profile'/>
                         </span>
+                        <Profile profile={profile}/>
+                        </div>
                     </div>
                 </div>
             </Container>
