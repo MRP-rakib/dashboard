@@ -5,7 +5,7 @@ interface chatProps{
 }
 function ChatNotification({chatNoti}:chatProps) {
   return (
-    <div className={`${!chatNoti&&'hidden'} absolute w-64 overflow-hidden top-14 -left-[200px] shadow-2xl rounded-md bg-white dark:bg-dark divide-y divide-gray-200 dark:divide-gray-500 z-20`}>
+    <div className={`${!chatNoti&&'hidden'} absolute w-64 overflow-hidden top-14 -right-15 md:right-0 shadow-2xl rounded-md bg-white dark:bg-dark divide-y divide-gray-200 dark:divide-gray-500 z-20`}>
             <div className='flex items-center gap-2 py-2 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white transition-colors duration-300'>
                 <Image src='/profile.jpg' width={32} height={32} alt='profile' className=' rounded-full object-center'/>
                 <span className='flex items-center gap-1 flex-wrap'>

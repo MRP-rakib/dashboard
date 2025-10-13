@@ -6,7 +6,7 @@ interface profileProps{
 }
 function profile({profile}:profileProps) {
   return (
-    <div className={`${!profile&&'hidden'} absolute top-14 -left-[250px] lg:-left-[200px] w-64 bg-white dark:bg-dark shadow-lg rounded-xl border-gray-100 overflow-hidden`}>
+    <div className={`${!profile&&'hidden'} absolute top-14 right-0 lg:-left-[200px] w-64 bg-white dark:bg-dark shadow-lg rounded-xl border-gray-100 overflow-hidden`}>
       {/* Profile Header */}
       <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-500">
         <Image
