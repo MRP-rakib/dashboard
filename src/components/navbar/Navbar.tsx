@@ -7,13 +7,31 @@ import { CiDark } from "react-icons/ci";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import Image from 'next/image';
-import { useEffect} from 'react';
+import { useEffect, useState} from 'react';
 import { toggleTheme } from '@/redux/darkmodeSlice';
 import { CiLight } from "react-icons/ci";
+import EmailNotification from '../notifications/EmailNotification';
+import ChatNotification from '../notifications/ChatNotification';
+
+
 function Navbar() {
     const dispatch = useAppDispatch()
      const {dark} = useAppSelector(state=>state.darkmode)
+     const [emailNoti,setEmailNoti] = useState<boolean>(false)
+     const [chatNoti,setChatNoti] = useState<boolean>(false)
 
+     const handelEmailNoti=()=>{
+        setEmailNoti(state=>state=!state)
+        if(!emailNoti){
+            setChatNoti(false)
+        }
+     }
+     const handelCahtNoti=()=>{
+        setChatNoti(state=>state=!state)
+        if(!chatNoti){
+            setEmailNoti(false)
+        }
+     }
      useEffect(()=>{
         if(dark){
             document.documentElement.classList.add('dark')
@@ -35,14 +53,20 @@ function Navbar() {
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'>{dark?(<CiLight />):(<CiDark />)}
                         </span>
-                        <span className='text-[18px] text-primary hover:text-white
+                        <div className=' relative'>
+                            <span onClick={handelCahtNoti} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'><IoChatbubblesOutline />
                         </span>
-                        <span className='text-[18px] text-primary hover:text-white
+                        <ChatNotification chatNoti={chatNoti}/>
+                        </div>
+                        <div className=' relative'>
+                            <span onClick={handelEmailNoti} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer'><MdOutlineEmail />
                         </span>
+                        <EmailNotification emailNoti={emailNoti}/>
+                        </div>
                         <span className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer overflow-hidden'>
