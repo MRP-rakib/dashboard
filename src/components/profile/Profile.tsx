@@ -6,9 +6,9 @@ interface profileProps{
 }
 function profile({profile}:profileProps) {
   return (
-    <div className={`${!profile&&'hidden'} absolute top-14 -left-[200px] w-64 bg-white shadow-lg rounded-xl border border-gray-100 overflow-hidden`}>
+    <div className={`${!profile&&'hidden'} absolute top-14 -left-[250px] lg:-left-[200px] w-64 bg-white dark:bg-dark shadow-lg rounded-xl border-gray-100 overflow-hidden`}>
       {/* Profile Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-gray-200">
+      <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-500">
         <Image
           src="/profile.jpg"
           alt="User avatar"
@@ -17,7 +17,7 @@ function profile({profile}:profileProps) {
           className="rounded-full"
         />
         <div>
-          <h2 className="text-sm font-semibold text-gray-800">CALVIN CARLO</h2>
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-white">CALVIN CARLO</h2>
           <p className="text-xs text-blue-500 font-medium uppercase tracking-wide">
             Orthopedic
           </p>
@@ -30,11 +30,11 @@ function profile({profile}:profileProps) {
           <LayoutDashboard size={16} />
           Dashboard
         </li> */}
-        <li className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
+        <li className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer text-sm text-gray-700 dark:text-white">
           <Settings size={16} />
           Profile Settings
         </li>
-        <li className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
+        <li className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer text-sm text-gray-700 dark:text-white">
           <LogOut size={16} />
           Logout
         </li>
