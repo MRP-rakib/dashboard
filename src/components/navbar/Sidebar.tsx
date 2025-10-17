@@ -33,48 +33,48 @@ function Sidebar() {
            </div>
            <ul className='flex flex-col gap-7.5 py-6 pl-6'>
               <li>
-                <Link href='/'>
-              <span className={`${pathName === '/'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard'>
+              <span className={`${pathName === '/dashboard'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                 <MdOutlineDashboard /> <p>Dashboard</p></span>
               </Link>
               </li>
               <li>
-                <Link href='/appointment'>
-              <span className={`${pathName === '/appointment'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard/appointment'>
+              <span className={`${pathName === '/dashboard/appointment'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                 <CiMedicalCross /> <p>Appointment</p></span>
               </Link>
               </li>
               <li>
-                <Link href='/doctors'>
-              <span className={`${pathName === '/doctors'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard/doctors'>
+              <span className={`${pathName === '/dashboard/doctors'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                <IoPersonOutline /> <p>Doctors</p></span>
               </Link>
               </li>
               <li>
-                <Link href='/patients'>
-              <span className={`${pathName === '/patients'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard/patients'>
+              <span className={`${pathName === '/dashboard/patients'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                <IoPersonAddOutline /> <p>Patients</p></span>
               </Link>
               </li>
               <li>
-                <Link href='/patients'>
-              <span className={`${pathName === '/patients'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard/patients'>
+              <span className={`${pathName === '/dashboard/patients'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                <MdApps /> <p>APP</p></span>
               </Link>
               </li>
               <li>
-                <Link href='/patients'>
-              <span className={`${pathName === '/patients'&& 'text-primary dark:text-white'} 
+                <Link href='/dashboard/patients'>
+              <span className={`${pathName === '/dashboard/patients'&& 'text-primary dark:text-white'} 
               flex items-center gap-2 text-[14px] lg:text-[16px] dark:text-gray-300 dark:hover:text-white font-medium
                   `}>
                <CiShoppingCart /> <p>Phermacy</p></span>
