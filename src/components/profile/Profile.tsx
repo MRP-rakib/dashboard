@@ -55,15 +55,16 @@ function Profile({profile}:profileProps) {
 
       {/* Menu Items */}
       <ul className="p-2 sm:p-3 space-y-1">
+        <Link href='*'>
         <li className="flex items-center gap-3 px-3 py-2.5 rounded-lg
           hover:bg-gray-100 dark:hover:bg-gray-800 
           cursor-pointer text-sm text-gray-700 dark:text-gray-200
           transition-colors duration-200">
-          <Link href='*'>
+          
           <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400" />
           <span className="font-medium">Profile Settings</span>
-          </Link>
         </li>
+          </Link>
         <li 
           onClick={() => dispatch(logout())} 
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg
