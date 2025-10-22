@@ -11,7 +11,7 @@ import GoogleBtn from '@/utils/GoogleBtn';
 import { useRouter } from 'next/navigation';
 import  { ChangeEvent, useEffect, useState } from 'react';
 
-const LoginComponent = () => {
+const SigninComponent = () => {
   const dispatch = useAppDispatch()
   const {message,loading,error} = useAppSelector(state=>state.login)
     const route = useRouter()
@@ -124,4 +124,4 @@ const handelSubmit=(e:React.FormEvent)=>{
   );
 };
 
-export default LoginComponent;
+export default SigninComponent;
