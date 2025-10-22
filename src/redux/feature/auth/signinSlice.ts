@@ -7,7 +7,7 @@ interface InitialStateTypes {
     loading:boolean,
     error:string|null
 }
-export const login = createAsyncThunk('auth/admin/login',async(data:authType)=>{
+export const signin = createAsyncThunk('auth/admin/login',async(data:authType)=>{
     try {
         const res = await API({
             endpoint:'auth/admin/login',
@@ -31,19 +31,19 @@ const initialState:InitialStateTypes={
      loading:false,
      error:null
 }
-export const loginSlice = createSlice({
-    name:'login',
+export const signinSlice = createSlice({
+    name:'signin',
     initialState,
     reducers:{
         clearMessage:state=>{state.message=null}
     },
     extraReducers:builder=>{
-        builder.addCase(login.pending,state=>{state.loading=true})
-        builder.addCase(login.fulfilled,(state,actions)=>{state.message=actions.payload.message;state.loading=false})
-        builder.addCase(login.rejected,(state,actions)=>{state.message=null;state.loading=false; state.error=actions.error.message||'login failed'})
+        builder.addCase(signin.pending,state=>{state.loading=true})
+        builder.addCase(signin.fulfilled,(state,actions)=>{state.message=actions.payload.message;state.loading=false})
+        builder.addCase(signin.rejected,(state,actions)=>{state.message=null;state.loading=false; state.error=actions.error.message||'signin failed'})
 
     }
 })
 
-export const {clearMessage} = loginSlice.actions
-export default loginSlice.reducer
+export const {clearMessage} = signinSlice.actions
+export default signinSlice.reducer

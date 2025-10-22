@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import sidebarReducer from './feature/sidebarSlice'
 import darkModeReducer from './feature/darkmodeSlice'
 import signupReducer from './feature/auth/signupSlice'
-import loginReducer from './feature/auth/loginSlice'
+import loginReducer from './feature/auth/signinSlice'
 
 
 const store = configureStore({
