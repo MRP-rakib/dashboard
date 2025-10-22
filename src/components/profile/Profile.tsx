@@ -41,7 +41,7 @@ function Profile({profile}:profileProps) {
             height={48}
             className="rounded-full ring-2 ring-blue-500/20 dark:ring-blue-400/20"
           />
-          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+          {user&&<div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>}
         </div>
         <div className="flex-1">
           <h2 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white capitalize">
