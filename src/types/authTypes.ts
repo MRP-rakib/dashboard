@@ -3,5 +3,6 @@ export interface authType {
      lastname?:string,
      email?:string,
      password?:string  
-     remembar?:boolean  
+     remembar?:boolean ,
+     role?:string 
 }

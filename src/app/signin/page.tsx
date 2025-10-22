@@ -16,8 +16,8 @@ const SigninComponent = () => {
   const {message,loading,error} = useAppSelector(state=>state.login)
     const route = useRouter()
   const [formData,setFormData] = useState<authType>({
-    email:'',
-    password:''
+    email:'example@gmail.com',
+    password:'123456'
   })
   const [checked,setChecked] = useState<boolean>(false)
 

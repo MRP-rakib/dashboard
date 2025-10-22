@@ -20,7 +20,11 @@ export const signin = createAsyncThunk('auth/admin/login',async(data:authType)=>
         if(res.token){
             localStorage.setItem('token',res.token)
         }
-        return res
+        return {
+            message:res.message,
+            token:res.token,
+            expiresIn:res.expiresIn
+        }
     } catch (error) {
         throw error
     }
