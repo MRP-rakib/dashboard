@@ -1,6 +1,60 @@
-import React from 'react';
+'use client'
+import { clearMessage, signup } from '@/redux/feature/auth/signupSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { authType } from '@/types/authTypes';
+import FacebookBtn from '@/utils/FacebookBtn';
+import FormButton from '@/utils/FormButton';
+import FormCheckBox from '@/utils/FormCheckBox';
+import FormInput from '@/utils/FormInput';
+import GoogleBtn from '@/utils/GoogleBtn';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const SignUpComponent = () => {
+  const dispatch = useAppDispatch()
+  const { message,error, loading } = useAppSelector(state => state.signup)
+  const route = useRouter()
+  const [formData, setFormData] = useState<authType>({
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: ''
+  })
+  const handelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev, [name]: value
+    }))
+  }
+  const handelSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    dispatch(signup({
+      firstname: formData.firstname,
+      lastname: formData.lastname,
+      email: formData.email,
+      password: formData.password
+    }))
+    
+     if(message){
+       setFormData({
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: ''
+      
+    })
+  
+     }
+}
+
+ useEffect(()=>{
+     if(message) {
+  route.push('/login')
+  dispatch(clearMessage())
+}
+   },[message,route,dispatch])
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
@@ -8,59 +62,26 @@ const SignUpComponent = () => {
           <span className="text-2xl font-bold text-blue-600"> Doctris</span>
         </div>
         <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
-        <form className="space-y-4">
-          <div className="flex space-x-4">
-            <div className="w-1/2">
-              <label className="block text-sm font-medium text-gray-700">First name *</label>
-              <input
-                type="text"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="First Name"
-              />
-            </div>
-            <div className="w-1/2">
-              <label className="block text-sm font-medium text-gray-700">Last name *</label>
-              <input
-                type="text"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Last Name"
-              />
-            </div>
+        <form className="space-y-4" onSubmit={handelSubmit}>
+          <div className='flex flex-col gap-4'>
+            <FormInput onChange={handelChange} type='text' placeholder='First Name' value={formData.firstname} name='firstname' label='First Name' />
+            <FormInput onChange={handelChange} type='text' placeholder='Last Name' value={formData.lastname} name='lastname' label='Last Name' />
+            <FormInput onChange={handelChange} type='gamil' placeholder='email' value={formData.email} name='email' label='Gmail' />
+            <FormInput onChange={handelChange} type='password' placeholder='password' value={formData.password} name='password' label='Password' />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Your Email *</label>
-            <input
-              type="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Email"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password *</label>
-            <input
-              type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Password"
-            />
-          </div>
-          <div className="flex items-center">
-            <input type="checkbox" className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-            <label className="ml-2 text-sm text-gray-700">I Accept Terms And Condition</label>
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Register
-          </button>
+          {error && (
+            <p className={`${error && "text-red-500"}`}>{error}</p>
+          )}
+          {message && (
+            <p className={`${message && "text-green-500"}`}>{message}</p>
+          )}
+
+          <FormCheckBox label='I Accept Terms And Condition' type='checkbox' name='term' value='' />
+          <FormButton btnName='Register' loading={loading} />
           <div className="text-center">Or</div>
-          <div className="flex justify-between">
-            <button className="w-1/2 py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              Facebook
-            </button>
-            <button className="w-1/2 py-2 px-4 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ml-2">
-              Google
-            </button>
+          <div className='flex gap-4'>
+            <FacebookBtn btnName='Facebook' />
+            <GoogleBtn btnName='Google' />
           </div>
           <p className="text-center text-sm text-gray-600 mt-4">
             Already have an account? <a href="#" className="text-blue-600 hover:underline">Sign in</a>

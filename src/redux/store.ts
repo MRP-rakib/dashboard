@@ -1,11 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sidebarReducer from './sidebarSlice'
-import darkModeReducer from './darkmodeSlice'
+import sidebarReducer from './feature/sidebarSlice'
+import darkModeReducer from './feature/darkmodeSlice'
+import signupReducer from './feature/auth/signupSlice'
+import loginReducer from './feature/auth/loginSlice'
+
 
 const store = configureStore({
     reducer:{
       sidebar:sidebarReducer,
       darkmode:darkModeReducer,
+      signup : signupReducer,
+      login:loginReducer
     }
 })
 export type RootState = ReturnType<typeof store.getState>; // type of the entire Redux state

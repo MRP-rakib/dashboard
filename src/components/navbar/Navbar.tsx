@@ -1,6 +1,6 @@
 'use client'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { toggleSidebar } from '@/redux/sidebarSlice';
+import { toggleSidebar } from '@/redux/feature/sidebarSlice';
 import Container from '@/utils/Container'
 import { IoIosMenu } from "react-icons/io";
 import { CiDark } from "react-icons/ci";
@@ -8,7 +8,7 @@ import { IoChatbubblesOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import Image from 'next/image';
 import { useEffect, useState} from 'react';
-import { toggleTheme } from '@/redux/darkmodeSlice';
+import { toggleTheme } from '@/redux/feature/darkmodeSlice';
 import { CiLight } from "react-icons/ci";
 import EmailNotification from '../notifications/EmailNotification';
 import ChatNotification from '../notifications/ChatNotification';
