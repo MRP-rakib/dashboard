@@ -38,7 +38,7 @@ export const profileSlice=createSlice({
     name:'profile',
     initialState,
     reducers:{
-        logout:state=>{state.user=null;localStorage.removeItem('token')}
+        logout:state=>{state.user=null;localStorage.removeItem('token');document.cookie='token=;path=/'}
     },
     extraReducers:builder=>{
         builder.addCase(fetchProfile.pending,state=>{state.loading=true})

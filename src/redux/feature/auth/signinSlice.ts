@@ -19,6 +19,7 @@ export const signin = createAsyncThunk('auth/admin/login',async(data:authType)=>
         })
         if(res.token){
             localStorage.setItem('token',res.token)
+            document.cookie =`token=${res.token};path=/`
         }
         return {
             message:res.message,
