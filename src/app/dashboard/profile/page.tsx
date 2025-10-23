@@ -24,7 +24,7 @@ function ProfileView() {
         setForm(prev => ({ ...prev, [name]: value }))
     }
 
-    const avatarSrc = ((user as unknown) as { avatar?: string })?.avatar || '/profile.jpg'
+    const avatarSrc = ((user as unknown) as { avatar?: string })?.avatar || '/image/profile.jpg'
 
     return (
         <div className="py-6">

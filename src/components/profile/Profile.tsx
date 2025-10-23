@@ -35,7 +35,7 @@ function Profile({profile}:profileProps) {
       <div className="flex items-center gap-4 p-4 sm:p-5 border-b border-gray-200/80 dark:border-gray-700/80">
         <div className="relative">
           <Image
-            src="/profile.jpg"
+            src="/image/profile.jpg"
             alt="User avatar"
             width={48}
             height={48}
