@@ -25,9 +25,9 @@ function Sidebar() {
              <div className='py-6 pl-6 lg:border-b lg:border-gray-200 dark:border-gray-600'>
             <Link href='/'>
             {dark?(
-                <Image src='/logo-light.png' width={110} height={60} alt='logo' className=' object-fill' />
+                <Image src='/image/logo-light.png' width={110} height={60} alt='logo' className=' object-fill' />
             ):(
-                <Image src='/logo-dark.png' width={110} height={60} alt='logo' className=' object-fill'/>
+                <Image src='/image/logo-dark.png' width={110} height={60} alt='logo' className=' object-fill'/>
             )}
             </Link>
            </div>
