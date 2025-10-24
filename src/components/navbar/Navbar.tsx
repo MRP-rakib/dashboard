@@ -82,7 +82,7 @@ function Navbar() {
                             <span onClick={handelProfile} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer overflow-hidden'>
-                        <Image src='/profile.jpg' width={36} height={36} alt='profile'/>
+                        <Image src='/image/profile.jpg' width={36} height={36} alt='profile'/>
                         </span>
                         <Profile profile={profile}/>
                         </div>

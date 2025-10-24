@@ -10,6 +10,7 @@ import FormInput from '@/utils/FormInput';
 import GoogleBtn from '@/utils/GoogleBtn';
 import { useRouter } from 'next/navigation';
 import  { ChangeEvent, useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 const SigninComponent = () => {
   const dispatch = useAppDispatch()
@@ -46,6 +47,7 @@ const handelSubmit=(e:React.FormEvent)=>{
 }
  useEffect(()=>{
      if(message) {
+      toast.success(message)
   route.push('/dashboard')
   dispatch(clearMessage())
 }
@@ -120,6 +122,14 @@ const handelSubmit=(e:React.FormEvent)=>{
           </p>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        theme="colored"
+      />
     </div>
   );
 };

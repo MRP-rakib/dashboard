@@ -6,11 +6,12 @@ import { Camera, Trash, Edit2, Key } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import FormInput from '@/utils/FormInput'
 import { changepassword } from '@/redux/feature/auth/changepasswordSlice'
+import { toast, ToastContainer } from 'react-toastify'
 
 function ProfileView() {
     const { user } = useAppSelector(state => state.profile)
     const {message,error} = useAppSelector(state=>state.changepassword)
-    const [isMatch,setIsMatch] =useState(false)
+    const [isMatch,setIsMatch] =useState(true)
     const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
     const [form, setForm] = useState({
@@ -30,35 +31,37 @@ function ProfileView() {
     }
 
     useEffect(()=>{
-        if (changepass.newpassword!==changepass.confirmpassword) {
-            setIsMatch(true)
-        }
-        else{
-            setIsMatch(false)
-        }
+        setIsMatch(changepass.newpassword!==changepass.confirmpassword)
     },[changepass.newpassword,changepass.confirmpassword])
+
+useEffect(()=>{
+    if(message) {
+        toast.success(message)
+        setChangePass({
+            password:'',
+            newpassword:'',
+            confirmpassword:''
+        })
+    }
+    if(error) toast.error(error)
+},[message,error])
+
+
     const handelchange =()=>{
-       if(isMatch) return alert('password is not matching')
+       if(isMatch) return toast.error('New password & Confirm Password is not matching ')
 
         dispatch(changepassword({
             password:changepass.password,
             newpassword:changepass.newpassword
         }))
-}
+        
+       }
 
-useEffect(()=>{
-    if(error){
-    alert(error)
-}
 
-if(message){
-    alert(message)
-}
-},[error,message])
 
     useEffect(() => {
         if (user) setForm({ firstname: user?.firstname || '', lastname: user?.lastname || '', email: user?.email || '' })
-    }, [user,form])
+    }, [user])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -152,6 +155,14 @@ if(message){
                 </div>
 
             </Container>
+            <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        theme="colored"
+      />
         </div>
     )
 }
