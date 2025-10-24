@@ -3,17 +3,58 @@ import Container from '@/utils/Container'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Camera, Trash, Edit2, Key } from 'lucide-react'
-import { useAppSelector } from '@/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import FormInput from '@/utils/FormInput'
+import { changepassword } from '@/redux/feature/auth/changepasswordSlice'
 
 function ProfileView() {
     const { user } = useAppSelector(state => state.profile)
+    const {message,error} = useAppSelector(state=>state.changepassword)
+    const [isMatch,setIsMatch] =useState(false)
+    const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
     const [form, setForm] = useState({
         firstname: '',
         lastname: '',
         email: ''
     })
+    const [changepass,setChangePass]= useState({
+        password:'',
+        newpassword:'',
+        confirmpassword:''
+    })
+   
+    const handelchangePass =(e: React.ChangeEvent<HTMLInputElement>)=>{
+       const {name,value} = e.target
+       setChangePass(prev=>({...prev,[name]:value}))
+    }
+
+    useEffect(()=>{
+        if (changepass.newpassword!==changepass.confirmpassword) {
+            setIsMatch(true)
+        }
+        else{
+            setIsMatch(false)
+        }
+    },[changepass.newpassword,changepass.confirmpassword])
+    const handelchange =()=>{
+       if(isMatch) return alert('password is not matching')
+
+        dispatch(changepassword({
+            password:changepass.password,
+            newpassword:changepass.newpassword
+        }))
+}
+
+useEffect(()=>{
+    if(error){
+    alert(error)
+}
+
+if(message){
+    alert(message)
+}
+},[error,message])
 
     useEffect(() => {
         if (user) setForm({ firstname: user?.firstname || '', lastname: user?.lastname || '', email: user?.email || '' })
@@ -53,7 +94,7 @@ function ProfileView() {
                                     <input aria-hidden type="file" accept="image/*" className="hidden" />
                                 </label>
 
-                                <button className="w-full flex items-center justify-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <button className="w-full flex items-center cursor-pointer justify-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                     <Trash className="w-4 h-4 text-red-500 dark:text-red-400" />
                                     <span className="text-xs sm:text-sm">Delete Avatar</span>
                                 </button>
@@ -65,7 +106,7 @@ function ProfileView() {
                     <div className="lg:col-span-2 bg-white/60 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-700 rounded-lg p-6 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">Profile details</h3>
-                            <button onClick={() => setEditMode(prev => !prev)} className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm text-gray-800 dark:text-gray-100">
+                            <button onClick={() => setEditMode(prev => !prev)} className="flex items-center cursor-pointer gap-2 px-3 py-1.5 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-sm text-gray-800 dark:text-gray-100">
                                 <Edit2 className="w-4 h-4" />
                                 <span>{editMode ? 'Cancel' : 'Edit'}</span>
                             </button>
@@ -79,7 +120,7 @@ function ProfileView() {
                             </div>
 
                             <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
-                                <button type="button" disabled={!editMode} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm disabled:opacity-60 disabled:cursor-not-allowed">Save changes</button>
+                                <button type="button" disabled={!editMode} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed">Save changes</button>
                             </div>
                         </form>
 
@@ -88,12 +129,12 @@ function ProfileView() {
                         <div>
                             <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-3">Change password</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <input type="password" placeholder="Current password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" disabled />
-                                <input type="password" placeholder="New password" className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" disabled />
-                                <input type="password" placeholder="Confirm new password" className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" disabled />
+                                <input type="password" name='password' onChange={handelchangePass} value={changepass.password} placeholder="Current password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100"  />
+                                <input type="password" name='newpassword' onChange={handelchangePass} value={changepass.newpassword} placeholder="New password" className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100"  />
+                                <input type="password" name='confirmpassword' onChange={handelchangePass} value={changepass.confirmpassword} placeholder="Confirm new password" className={`w-full px-3 py-2 border rounded-md ${isMatch&&'border-red-500 outline-red-500'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100`}  />
                             </div>
                             <div className="mt-3 flex justify-end">
-                                <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm">
+                                <button onClick={handelchange} className="flex items-center cursor-pointer gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm">
                                     <Key className="w-4 h-4" />
                                     Change password
                                 </button>
@@ -104,7 +145,7 @@ function ProfileView() {
                             <h4 className="text-sm font-medium text-gray-800 dark:text-gray-100 mb-2">Danger zone</h4>
                             <p className="text-xs text-gray-500 dark:text-gray-300 mb-3">Deleting your profile is permanent. This action cannot be undone.</p>
                             <div className="flex items-center justify-end">
-                                <button className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm">Delete profile</button>
+                                <button className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Delete profile</button>
                             </div>
                         </div>
                     </div>

@@ -4,5 +4,6 @@ export interface authType {
      email?:string,
      password?:string  
      remembar?:boolean ,
-     role?:string 
+     role?:string,
+     newpassword?:string 
 }
