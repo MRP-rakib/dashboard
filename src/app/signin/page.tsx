@@ -1,5 +1,5 @@
 'use client'
-import { clearMessage,signin } from '@/redux/feature/auth/signinSlice';
+import { signin } from '@/redux/feature/auth/signinSlice';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { authType } from '@/types/authTypes';
@@ -49,7 +49,7 @@ const handelSubmit=(e:React.FormEvent)=>{
      if(message) {
       toast.success(message)
   route.push('/dashboard')
-  dispatch(clearMessage())
+  // dispatch(clearMessage())
 }
    },[message,route,dispatch])
 

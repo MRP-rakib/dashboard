@@ -5,6 +5,7 @@ import signupReducer from './feature/auth/signupSlice'
 import loginReducer from './feature/auth/signinSlice'
 import profileReducer from './feature/auth/profileSlice'
 import changepasswordReducer from "./feature/auth/changepasswordSlice";
+import  changeUserInfoReducer  from "./feature/auth/userDetailsChangeSlice";
 
 
 const store = configureStore({
@@ -14,7 +15,8 @@ const store = configureStore({
       signup : signupReducer,
       login:loginReducer,
       profile:profileReducer,
-      changepassword:changepasswordReducer
+      changepassword:changepasswordReducer,
+      changeUserInfo:changeUserInfoReducer,
     }
 })
 export type RootState = ReturnType<typeof store.getState>; // type of the entire Redux state

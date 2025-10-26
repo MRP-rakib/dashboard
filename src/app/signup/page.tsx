@@ -1,5 +1,5 @@
 'use client'
-import { clearMessage, signup } from '@/redux/feature/auth/signupSlice';
+import { signup } from '@/redux/feature/auth/signupSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { authType } from '@/types/authTypes';
 import FacebookBtn from '@/utils/FacebookBtn';
@@ -51,7 +51,7 @@ const SignUpComponent = () => {
  useEffect(()=>{
      if(message) {
   route.push('/signin')
-  dispatch(clearMessage())
+  // dispatch(clearMessage())
 }
    },[message,route,dispatch])
 

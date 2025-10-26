@@ -9,7 +9,7 @@ const API = async({endpoint,option}:apiProps)=>{
          const data = await res.json()
          if(!res.ok){
              
-             console.log(data.message|| 'something went wrong');
+             console.log(data.message||'something went wrong');
             
              
              throw new Error(data.message)

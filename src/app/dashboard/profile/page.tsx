@@ -5,13 +5,15 @@ import Image from 'next/image'
 import { Camera, Trash, Edit2, Key } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import FormInput from '@/utils/FormInput'
-import { changepassword } from '@/redux/feature/auth/changepasswordSlice'
 import { toast, ToastContainer } from 'react-toastify'
+import { changepasswordThunk } from '@/redux/feature/auth/changepasswordSlice'
+import { changeUserInfoThunk, clearUserInfo } from '@/redux/feature/auth/userDetailsChangeSlice'
 
 function ProfileView() {
     const { user } = useAppSelector(state => state.profile)
-    const {message,error} = useAppSelector(state=>state.changepassword)
-    const [isMatch,setIsMatch] =useState(true)
+    const changepassword = useAppSelector(state => state.changepassword)
+    const changeUserInfo = useAppSelector(state => state.changeUserInfo)
+    const [isMatch, setIsMatch] = useState(true)
     const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
     const [form, setForm] = useState({
@@ -19,54 +21,67 @@ function ProfileView() {
         lastname: '',
         email: ''
     })
-    const [changepass,setChangePass]= useState({
-        password:'',
-        newpassword:'',
-        confirmpassword:''
+    const [changepass, setChangePass] = useState({
+        password: '',
+        newpassword: '',
+        confirmpassword: ''
     })
-   
-    const handelchangePass =(e: React.ChangeEvent<HTMLInputElement>)=>{
-       const {name,value} = e.target
-       setChangePass(prev=>({...prev,[name]:value}))
+
+    const handelchangePass = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setChangePass(prev => ({ ...prev, [name]: value }))
     }
-
-    useEffect(()=>{
-        setIsMatch(changepass.newpassword!==changepass.confirmpassword)
-    },[changepass.newpassword,changepass.confirmpassword])
-
-useEffect(()=>{
-    if(message) {
-        toast.success(message)
-        setChangePass({
-            password:'',
-            newpassword:'',
-            confirmpassword:''
-        })
+    const handelUserInfo = () => {
+          dispatch(changeUserInfoThunk({
+            firstname:form.firstname,
+            lastname:form.lastname,
+            email:form.email
+          }))
+          if(changeUserInfo.message||changeUserInfo.error){
+            dispatch(clearUserInfo())
+        }
     }
-    if(error) toast.error(error)
-},[message,error])
-
-
-    const handelchange =()=>{
-       if(isMatch) return toast.error('New password & Confirm Password is not matching ')
-
-        dispatch(changepassword({
-            password:changepass.password,
-            newpassword:changepass.newpassword
-        }))
-        
-       }
-
-
-
     useEffect(() => {
         if (user) setForm({ firstname: user?.firstname || '', lastname: user?.lastname || '', email: user?.email || '' })
     }, [user])
+
+    useEffect(() => {
+        if (changeUserInfo.message) toast.success(changeUserInfo.message)
+        if (changeUserInfo.error) toast.error(changeUserInfo.error)
+        
+    }, [changeUserInfo.message, changeUserInfo.error])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setForm(prev => ({ ...prev, [name]: value }))
     }
+
+    const handelchange = () => {
+        if (isMatch) return toast.error('New password & Confirm Password is not matching ')
+
+        dispatch(changepasswordThunk({
+            password: changepass.password,
+            newpassword: changepass.newpassword
+        }))
+
+    }
+
+    useEffect(() => {
+        setIsMatch(changepass.newpassword !== changepass.confirmpassword)
+    }, [changepass.newpassword, changepass.confirmpassword])
+
+    useEffect(() => {
+        if (changepassword.message) {
+            toast.success(changepassword.message)
+            setChangePass({
+                password: '',
+                newpassword: '',
+                confirmpassword: ''
+            })
+        }
+        if (changepassword.error) toast.error(changepassword.error)
+    }, [changepassword.message, changepassword.error])
+
 
     const avatarSrc = ((user as unknown) as { avatar?: string })?.avatar || '/image/profile.jpg'
 
@@ -116,25 +131,24 @@ useEffect(()=>{
                         </div>
 
                         <form className="grid grid-cols-1 sm:grid-cols-2  gap-4">
-                            <FormInput label="First Name" type="text" placeholder="First name" name="firstname" value={form?.firstname} onChange={handleChange} readOnly={!editMode} />
-                            <FormInput label="Last Name" type="text" placeholder="Last name" name="lastname" value={form?.lastname} onChange={handleChange} readOnly={!editMode} />
+                            <FormInput label="First Name" type="text" placeholder="First name" name="firstname" value={editMode ? form.firstname : user?.firstname} onChange={handleChange} readOnly={!editMode} />
+                            <FormInput label="Last Name" type="text" placeholder="Last name" name="lastname" value={editMode ? form.lastname : user?.lastname} onChange={handleChange} readOnly={!editMode} />
                             <div className="sm:col-span-2">
-                                <FormInput label="Email" type="email" placeholder="you@example.com" name="email" value={form?.email} onChange={handleChange} className="" readOnly={!editMode} />
-                            </div>
-
-                            <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
-                                <button type="button" disabled={!editMode} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed">Save changes</button>
+                                <FormInput label="Email" type="email" placeholder="you@example.com" name="email" value={editMode ? form.email : user?.email} onChange={handleChange} className="" readOnly={!editMode} />
                             </div>
                         </form>
+                        <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
+                            <button type="button" onClick={handelUserInfo} disabled={!editMode} className="px-4 py-2 bg-green-600 text-white rounded-md text-sm disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed">Save changes</button>
+                        </div>
 
                         <hr className="my-6 border-gray-100 dark:border-gray-700" />
 
                         <div>
                             <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-3">Change password</h4>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <input type="password" name='password' onChange={handelchangePass} value={changepass.password} placeholder="Current password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100"  />
-                                <input type="password" name='newpassword' onChange={handelchangePass} value={changepass.newpassword} placeholder="New password" className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100"  />
-                                <input type="password" name='confirmpassword' onChange={handelchangePass} value={changepass.confirmpassword} placeholder="Confirm new password" className={`w-full px-3 py-2 border rounded-md ${isMatch&&'border-red-500 outline-red-500'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100`}  />
+                                <input type="password" name='password' onChange={handelchangePass} value={changepass.password} placeholder="Current password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" />
+                                <input type="password" name='newpassword' onChange={handelchangePass} value={changepass.newpassword} placeholder="New password" className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" />
+                                <input type="password" name='confirmpassword' onChange={handelchangePass} value={changepass.confirmpassword} placeholder="Confirm new password" className={`w-full px-3 py-2 border rounded-md ${isMatch && 'border-red-500 dark:border-red-500 outline-red-500'} bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100`} />
                             </div>
                             <div className="mt-3 flex justify-end">
                                 <button onClick={handelchange} className="flex items-center cursor-pointer gap-2 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md text-sm">
@@ -156,13 +170,13 @@ useEffect(()=>{
 
             </Container>
             <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        theme="colored"
-      />
+                position="top-right"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                theme="colored"
+            />
         </div>
     )
 }
