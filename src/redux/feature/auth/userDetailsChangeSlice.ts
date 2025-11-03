@@ -2,11 +2,11 @@ import API from "@/api/api";
 import { authType } from "@/types/authTypes";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const changeUserInfoThunk = createAsyncThunk('auth/api/profile', async (formData: authType) => {
+export const changeUserInfoThunk = createAsyncThunk('api/auth/admin/profile', async (formData: authType) => {
     try {
         const token = localStorage.getItem('token')
         const res = API({
-            endpoint: 'auth/api/profile',
+            endpoint: 'auth/admin/profile',
             option: {
                 method: "PUT",
                 headers: {
