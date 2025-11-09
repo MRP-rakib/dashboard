@@ -5,5 +5,6 @@ export interface authType {
      password?:string  
      remembar?:boolean ,
      role?:string,
+     image?:string,
      newpassword?:string 
 }
