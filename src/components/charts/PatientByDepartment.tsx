@@ -17,7 +17,7 @@ const PatientByDepartment = () => {
   const totalPatients = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="w-full h-full bg-white dark:bg-dark rounded-lg p-4">
+    <div className="w-full flex-1 h-full bg-white dark:bg-dark rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold dark:text-white">Patients by Department</h2>
         <select 

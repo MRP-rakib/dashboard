@@ -80,7 +80,7 @@ export const PatientVisitByGender = () => {
   const [selectedYear] = useState('2020');
 
   return (
-    <div className="w-full h-full bg-white dark:bg-dark rounded-lg p-4">
+    <div className="w-[60%] h-full bg-white dark:bg-dark rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold dark:text-white">Patients visit by Gender</h2>
         <select 
