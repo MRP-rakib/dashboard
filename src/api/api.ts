@@ -42,4 +42,4 @@ const API = async({endpoint,option}:apiProps)=>{
 //        }
 // }
 
-// export default API
+export default API
