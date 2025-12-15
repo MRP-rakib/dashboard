@@ -1,12 +1,12 @@
 import API from "@/api/api";
-import { authType } from "@/types/authTypes";
+import { userType } from "@/types/userType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const changeUserInfoThunk = createAsyncThunk('api/auth/admin/profile', async (formData: authType) => {
+export const updateUser = createAsyncThunk('api/auth/admin/profile', async (formData: userType) => {
     try {
         const token = localStorage.getItem('token')
         const res = API({
-            endpoint: 'auth/admin/profile',
+            endpoint: `auth/admin/update-user/${formData._id}`,
             option: {
                 method: "PUT",
                 headers: {
@@ -42,9 +42,9 @@ export const changeUserInfoSlice = createSlice({
         clearUserInfo: state => { state.message = null; state.error = null; state.loading = false }
     },
     extraReducers: builder => {
-        builder.addCase(changeUserInfoThunk.pending, state => { state.loading = true })
-        builder.addCase(changeUserInfoThunk.fulfilled, (state, actions) => { state.loading = false; state.error = null; state.message = actions.payload.message })
-        builder.addCase(changeUserInfoThunk.rejected, (state, actions) => { state.loading = false; state.message = null; state.error = actions.error.message || '' })
+        builder.addCase(updateUser.pending, state => { state.loading = true })
+        builder.addCase(updateUser.fulfilled, (state, actions) => { state.loading = false; state.error = null; state.message = actions.payload.message })
+        builder.addCase(updateUser.rejected, (state, actions) => { state.loading = false; state.message = null; state.error = actions.error.message || '' })
     }
 })
 

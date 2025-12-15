@@ -18,6 +18,7 @@ import Profile from '../profile/Profile'
 function Navbar() {
     const dispatch = useAppDispatch()
      const {dark} = useAppSelector(state=>state.darkmode)
+     const {user} = useAppSelector(state=>state.profile)
      const [emailNoti,setEmailNoti] = useState<boolean>(false)
      const [chatNoti,setChatNoti] = useState<boolean>(false)
      const [profile,setProfile] = useState<boolean>(false)
@@ -78,12 +79,12 @@ function Navbar() {
                         </span>
                         <EmailNotification emailNoti={emailNoti}/>
                         </div>
-                        <div className=' relative'>
-                            <span onClick={handelProfile} className='text-[18px] text-primary hover:text-white
+                        <div className=' relative '>
+                            <div onClick={handelProfile} className='text-[18px] text-primary hover:text-white
                     bg-[#EBF0FD] dark:bg-[#1F2F48] hover:bg-[#396CF0] flex items-center justify-center w-7.5 h-7.5 lg:w-9  lg:h-9 rounded-full
                      transition-colors duration-300 cursor-pointer overflow-hidden'>
-                        <Image src='/image/profile.jpg' width={36} height={36} alt='profile'/>
-                        </span>
+                        <Image src={user?.avatar?.url||'/image/profile.jpg'} fill className='rounded-full' alt='profile'/>
+                        </div>
                         <Profile profile={profile}/>
                         </div>
                     </div>

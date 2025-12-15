@@ -1,10 +1,11 @@
 import React from 'react'
 import { FormInputType } from '@/types/formInputType'
-function FormInput({label,type,placeholder,name,value,onChange,className, readOnly}:FormInputType) {
+function FormInput({label,type,placeholder,name,value,onChange,className
+  , readOnly}:FormInputType) {
   return (
    
             <div className="w-full text-gray-800 dark:text-gray-200">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 sm:mb-2">{label} *</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 sm:mb-2">{label}</label>
               <input
                 type={type}
                 className={`${className} w-full px-3 sm:px-4 py-2 sm:py-2.5 

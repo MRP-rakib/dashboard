@@ -77,7 +77,7 @@ const data = [
   },
 ];
 export const PatientVisitByGender = () => {
-  const [selectedYear] = useState('2020');
+  const [selectedYear,setSelectedYear] = useState('2020');
 
   return (
     <div className="w-[60%] h-full bg-white dark:bg-dark rounded-lg p-4">
@@ -85,6 +85,7 @@ export const PatientVisitByGender = () => {
         <h2 className="text-lg font-semibold dark:text-white">Patients visit by Gender</h2>
         <select 
           value={selectedYear}
+          onChange={(e) => setSelectedYear(e.target.value)}
           className="px-2 py-1 border rounded dark:bg-slate-700 dark:text-white dark:border-slate-600"
         >
           <option value="2020">2020</option>

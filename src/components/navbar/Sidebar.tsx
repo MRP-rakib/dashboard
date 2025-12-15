@@ -27,7 +27,7 @@ function Sidebar() {
             {dark?(
                 <Image src='/image/logo-light.png' width={110} height={60} alt='logo' className=' object-fill' />
             ):(
-                <Image src='/image/logo-dark.png' width={110} height={60} alt='logo' className=' object-fill'/>
+                <Image src='/image/logo-dark.png' width={110} height={60} alt='logo'  className=' object-fill'/>
             )}
             </Link>
            </div>

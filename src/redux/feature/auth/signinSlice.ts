@@ -1,5 +1,5 @@
 import API from "@/api/api";
-import { authType } from "@/types/authTypes";
+import { userType } from "@/types/userType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface InitialStateTypes {
@@ -7,25 +7,19 @@ interface InitialStateTypes {
     loading: boolean,
     error: string | null
 }
-export const signin = createAsyncThunk('auth/admin/login', async (data: authType) => {
+export const signin = createAsyncThunk('auth/admin/login', async (data: userType) => {
     try {
         const res = await API({
             endpoint: 'auth/admin/login',
             option: {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials:'include'
             }
         })
-        if (res.token) {
-            localStorage.setItem('token', res.token)
-            document.cookie = `token=${res.token};path=/;`
-        }
-        return {
-            message: res.message,
-            token: res.token,
-            expiresIn: res.expiresIn
-        }
+        localStorage.setItem('token',res.accessToken)
+        return res
     } catch (error) {
         throw error
     }
@@ -45,7 +39,7 @@ export const signinSlice = createSlice({
     extraReducers: builder => {
         builder.addCase(signin.pending, state => { state.loading = true })
         builder.addCase(signin.fulfilled, (state, actions) => { state.message = actions.payload.message; state.loading = false })
-        builder.addCase(signin.rejected, (state, actions) => { state.message = null; state.loading = false; state.error = actions.error.message || 'signin failed' })
+        builder.addCase(signin.rejected, (state, actions) => { state.message = null; state.loading = false; state.error = actions.error.message || '' })
 
     }
 })

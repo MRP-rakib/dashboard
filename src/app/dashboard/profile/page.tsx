@@ -6,20 +6,28 @@ import { Camera, Trash, Edit2, Key } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import FormInput from '@/utils/FormInput'
 import { toast, ToastContainer } from 'react-toastify'
-import { changepasswordThunk } from '@/redux/feature/auth/changepasswordSlice'
-import { changeUserInfoThunk, clearUserInfo } from '@/redux/feature/auth/userDetailsChangeSlice'
+import { changepasswordThunk, clearUserMessage } from '@/redux/feature/auth/changepasswordSlice'
+import { userType } from '@/types/userType'
+import { clearUserInfo, updateUser } from '@/redux/feature/auth/userDetailsChangeSlice'
+import { deleteAccount } from '@/redux/feature/auth/deleteAccountSlice'
 
 function ProfileView() {
     const { user } = useAppSelector(state => state.profile)
     const changepassword = useAppSelector(state => state.changepassword)
     const changeUserInfo = useAppSelector(state => state.changeUserInfo)
+    const [dlt, setDlt] = useState<boolean>(false)
     const [isMatch, setIsMatch] = useState(true)
     const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
-    const [form, setForm] = useState({
+    const [dltPass,setDltPass] = useState<string>('')
+    const [form, setForm] = useState<userType>({
         firstname: '',
         lastname: '',
-        email: ''
+        email: '',
+        bio: '',
+        age: 0,
+        gender: ''
+
     })
     const [changepass, setChangePass] = useState({
         password: '',
@@ -32,28 +40,38 @@ function ProfileView() {
         setChangePass(prev => ({ ...prev, [name]: value }))
     }
     const handelUserInfo = () => {
-          dispatch(changeUserInfoThunk({
-            firstname:form.firstname,
-            lastname:form.lastname,
-            email:form.email
-          }))
-          if(changeUserInfo.message||changeUserInfo.error){
-            dispatch(clearUserInfo())
-        }
+        dispatch(updateUser({
+            firstname: form.firstname,
+            lastname: form.lastname,
+            email: form.email,
+            bio: form.bio,
+            age: form.age,
+            gender: form.gender,
+            _id: user?._id
+        }))
     }
     useEffect(() => {
-        if (user) setForm({ firstname: user?.firstname || '', lastname: user?.lastname || '', email: user?.email || '' })
-    }, [user])
+        if (changeUserInfo.message) {
+            toast.success(changeUserInfo.message)
+            window.location.reload()
+        }
+
+        if (changeUserInfo.error) {
+            toast.error(changeUserInfo.error)
+            dispatch(clearUserInfo())
+        }
+
+    }, [changeUserInfo.message, changeUserInfo.error, dispatch])
 
     useEffect(() => {
         if (changeUserInfo.message) toast.success(changeUserInfo.message)
         if (changeUserInfo.error) toast.error(changeUserInfo.error)
-        
+
     }, [changeUserInfo.message, changeUserInfo.error])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
-        setForm(prev => ({ ...prev, [name]: value }))
+        setForm(prev => ({ ...prev, [name]: name === 'age' ? Number(value) : value }))
     }
 
     const handelchange = () => {
@@ -61,7 +79,8 @@ function ProfileView() {
 
         dispatch(changepasswordThunk({
             password: changepass.password,
-            newpassword: changepass.newpassword
+            newpassword: changepass.newpassword,
+            _id: user._id
         }))
 
     }
@@ -79,11 +98,15 @@ function ProfileView() {
                 confirmpassword: ''
             })
         }
-        if (changepassword.error) toast.error(changepassword.error)
-    }, [changepassword.message, changepassword.error])
+        if (changepassword.error) {
+            toast.error(changepassword.error)
+            dispatch(clearUserMessage())
+        }
+    }, [changepassword.message, changepassword.error, dispatch])
 
 
-    const avatarSrc = ((user as unknown) as { avatar?: string })?.avatar || '/image/profile.jpg'
+    const avatarSrc = user?.avatar?.url || '/image/profile.jpg'
+
 
     return (
         <div className="py-6">
@@ -95,20 +118,22 @@ function ProfileView() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left: Avatar & actions */}
                     <div className="lg:col-span-1 bg-white/60 dark:bg-gray-800/60 border border-gray-100 dark:border-gray-700 rounded-lg p-5 shadow-sm">
                         <div className="flex flex-col items-center text-center">
                             <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden shadow-md">
                                 <Image src={avatarSrc} alt="avatar" fill sizes="(max-width: 768px) 128px, 192px" className="object-cover" />
                             </div>
-                            <h2 className="mt-4 text-lg font-medium text-gray-800 dark:text-gray-100 capitalize">{user?.firstname} {user?.lastname}</h2>
-                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1 uppercase tracking-wide">{user?.role || 'User'}</p>
+                            <h2 className="mt-4 text-lg font-medium text-gray-800 dark:text-gray-100 capitalize">{user.firstname && user.lastname ? `${user.firstname} ${user.lastname}` : 'full name'}</h2>
+                            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1 tracking-wide">@{user?.username || 'user'}</p>
+                            <div className='flex items-center gap-5'>
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1 tracking-wide capitalize">age: {user?.age || 0}</p>
+                                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-300 mt-1 tracking-wide capitalize">gender: {user?.gender || 'null'}</p>
+                            </div>
 
                             <div className="mt-5 w-full space-y-2">
                                 <label className="flex items-center justify-center gap-2 cursor-pointer w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
                                     <Camera className="w-4 h-4" />
                                     <span className="text-sm">Change Avatar</span>
-                                    {/* hidden file input (visual only) */}
                                     <input aria-hidden type="file" accept="image/*" className="hidden" />
                                 </label>
 
@@ -117,10 +142,11 @@ function ProfileView() {
                                     <span className="text-xs sm:text-sm">Delete Avatar</span>
                                 </button>
                             </div>
+                            <div className='pt-5 text-start dark:text-white'>
+                                {user?.bio}
+                            </div>
                         </div>
                     </div>
-
-                    {/* Right: Details and actions */}
                     <div className="lg:col-span-2 bg-white/60 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-700 rounded-lg p-6 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">Profile details</h3>
@@ -131,10 +157,39 @@ function ProfileView() {
                         </div>
 
                         <form className="grid grid-cols-1 sm:grid-cols-2  gap-4">
-                            <FormInput label="First Name" type="text" placeholder="First name" name="firstname" value={editMode ? form.firstname : user?.firstname} onChange={handleChange} readOnly={!editMode} />
-                            <FormInput label="Last Name" type="text" placeholder="Last name" name="lastname" value={editMode ? form.lastname : user?.lastname} onChange={handleChange} readOnly={!editMode} />
+                            <FormInput label="First Name" type="text" placeholder="First name" name="firstname" value={editMode ? form.firstname : user.firstname} onChange={handleChange} readOnly={!editMode} />
+                            <FormInput label="Last Name" type="text" placeholder="Last name" name="lastname" value={editMode ? form.lastname : user.lastname} onChange={handleChange} readOnly={!editMode} />
                             <div className="sm:col-span-2">
-                                <FormInput label="Email" type="email" placeholder="you@example.com" name="email" value={editMode ? form.email : user?.email} onChange={handleChange} className="" readOnly={!editMode} />
+                                <FormInput label="Email" type="email" placeholder="you@example.com" name="email" value={editMode ? form.email : user.email} onChange={handleChange} className="" readOnly={!editMode} />
+                                {editMode &&
+                                    <div className='mt-2'>
+                                        <div className='flex items-center gap-4 mb-2'>
+                                            <FormInput label="age" type="number" placeholder="enter your age" name="age" value={(editMode ? form.age ?? '' : user.age ?? '').toString()} onChange={handleChange} className="" readOnly={!editMode} />
+                                            <FormInput label="gender" type="text" placeholder="enter your gender" name="gender" value={editMode ? form.gender : user.gender} onChange={handleChange} className="" readOnly={!editMode} />
+                                        </div>
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 sm:mb-2">Bio</label>
+                                        <textarea
+                                            className={`w-full px-3 sm:px-4 py-2 sm:py-2.5 
+                                                        text-sm sm:text-base
+                                                        border border-gray-300 
+                                                        rounded-md shadow-sm
+                                                        dark:text-white
+                                                        placeholder:text-gray-400 placeholder:text-xs sm:placeholder:text-sm
+                                                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                                                        hover:border-blue-400 transition-colors
+                                                        disabled:bg-gray-50 disabled:text-gray-500 disabled:border-gray-200
+                                                        invalid:border-red-500 invalid:ring-red-500
+                                                         resize-none`}
+                                            rows={4}
+                                            value={editMode ? form.bio : user.bio}
+                                            onChange={handleChange}
+                                            name="bio"
+                                            placeholder="Enter your bio"
+                                            readOnly={!editMode}
+                                        />
+                                    </div>
+
+                                }
                             </div>
                         </form>
                         <div className="sm:col-span-2 flex items-center justify-end gap-3 mt-2">
@@ -161,14 +216,29 @@ function ProfileView() {
                         <div className="mt-6 border-t pt-4">
                             <h4 className="text-sm font-medium text-gray-800 dark:text-gray-100 mb-2">Danger zone</h4>
                             <p className="text-xs text-gray-500 dark:text-gray-300 mb-3">Deleting your profile is permanent. This action cannot be undone.</p>
-                            <div className="flex items-center justify-end">
-                                <button className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Delete profile</button>
+                            <div className={`flex items-center ${dlt?' justify-between':'justify-end'} w-full gap-2`}>
+
+                                {dlt ? (
+                                    <div className='flex items-center gap-2 w-full'>
+                                        <div className='w-full'>
+                                            <input type="password" name='password' onChange={(e)=>setDltPass(e.target.value)} value={dltPass} placeholder="enter password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" />
+                                        </div>
+                                        <div className='w-full flex gap-2 items-center'>
+                                            <button onClick={()=>dispatch(deleteAccount({_id:user._id,password:dltPass}))} className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Confirm</button>
+                                            <button onClick={()=>setDlt(false)} className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-md text-sm cursor-pointer">Cancel</button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <button onClick={()=>setDlt(true)} className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Delete profile</button>
+
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
 
             </Container>
+
             <ToastContainer
                 position="top-right"
                 autoClose={2000}

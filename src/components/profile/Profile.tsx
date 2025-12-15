@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Settings, LogOut } from "lucide-react";
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchProfile, logout } from '@/redux/feature/auth/profileSlice';
+import { fetchProfile} from '@/redux/feature/auth/profileSlice';
 import Link from 'next/link';
 
 interface profileProps{
@@ -13,6 +13,7 @@ interface profileProps{
 function Profile({profile}:profileProps) {
    const dispatch = useAppDispatch()
    const {user} = useAppSelector(state=>state.profile)   
+   console.log(user);
    
    useEffect(()=>{
      dispatch(fetchProfile())
@@ -33,22 +34,21 @@ function Profile({profile}:profileProps) {
     >
       {/* Profile Header */}
       <div className="flex items-center gap-4 p-4 sm:p-5 border-b border-gray-200/80 dark:border-gray-700/80">
-        <div className="relative">
+        <div className="relative w-12 h-12 rounded-full">
           <Image
-            src="/image/profile.jpg"
+            src={user?.avatar?.url??''}
             alt="User avatar"
-            width={48}
-            height={48}
-            className="rounded-full ring-2 ring-blue-500/20 dark:ring-blue-400/20"
+            fill
+            className="rounded-full w-12 h-12 overflow-hidden ring-2 ring-blue-500/20 dark:ring-blue-400/20"
           />
-          {user&&<div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>}
+          {user&&<div className="absolute z-20 bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>}
         </div>
         <div className="flex-1">
           <h2 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-white capitalize">
             {user?.firstname} {user?.lastname}
           </h2>
           <p className="text-xs sm:text-sm text-blue-500 dark:text-blue-400 font-medium">
-            {user?.role || 'User'}
+            {user?.email}
           </p>
         </div>
       </div>
@@ -66,9 +66,9 @@ function Profile({profile}:profileProps) {
         </li>
           </Link>
         <li 
-          onClick={() => {dispatch(logout())
-            window.location.href = '/signin'
-          }} 
+          // onClick={() => {dispatch(logout())
+          //   window.location.href = '/signin'
+          // }} 
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg
             hover:bg-red-50 dark:hover:bg-red-900/20
             cursor-pointer text-sm text-red-600 dark:text-red-400

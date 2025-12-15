@@ -13,7 +13,7 @@ const data = [
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 const PatientByDepartment = () => {
-  const [selectedPeriod] = useState('Today');
+  const [selectedPeriod,setSelectedPeriod] = useState('Today');
   const totalPatients = data.reduce((sum, item) => sum + item.value, 0);
 
   return (
@@ -22,6 +22,7 @@ const PatientByDepartment = () => {
         <h2 className="text-lg font-semibold dark:text-white">Patients by Department</h2>
         <select 
           value={selectedPeriod}
+          onChange={(e)=>setSelectedPeriod(e.target.value)}
           className="px-2 py-1 border rounded bg-white dark:text-white dark:bg-dark border-slate-600"
         >
           <option value="Today">Today</option>
@@ -32,7 +33,7 @@ const PatientByDepartment = () => {
       </div>
       
       <div className="relative" style={{ height: '300px' }}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
               data={data}

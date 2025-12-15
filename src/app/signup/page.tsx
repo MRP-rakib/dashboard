@@ -1,7 +1,7 @@
 'use client'
 import { signup } from '@/redux/feature/auth/signupSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { authType } from '@/types/authTypes';
+import { userType } from '@/types/userType';
 import FacebookBtn from '@/utils/FacebookBtn';
 import FormButton from '@/utils/FormButton';
 import FormCheckBox from '@/utils/FormCheckBox';
@@ -9,17 +9,19 @@ import FormInput from '@/utils/FormInput';
 import GoogleBtn from '@/utils/GoogleBtn';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const SignUpComponent = () => {
   const dispatch = useAppDispatch()
   const { message,error, loading } = useAppSelector(state => state.signup)
   const route = useRouter()
-  const [formData, setFormData] = useState<authType>({
-    firstname: '',
-    lastname: '',
-    email: '',
-    password: ''
+  const [ismatch,setIsmatch]= useState<boolean>(false)
+  const [formData, setFormData] = useState<userType>({
+    username:'',
+    email:'',
+    password:'',
+    cppassword:''
   })
   const handelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -27,11 +29,23 @@ const SignUpComponent = () => {
       ...prev, [name]: value
     }))
   }
+ 
+  useEffect(()=>{
+    if(formData.password !==formData.cppassword){
+      setIsmatch(true)
+    }else{
+      setIsmatch(false)
+    }
+  },[formData,ismatch])
+
   const handelSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if(formData.password!==formData.cppassword){
+      return
+    }
+
     dispatch(signup({
-      firstname: formData.firstname,
-      lastname: formData.lastname,
+      username: formData.username,
       email: formData.email,
       password: formData.password
     }))
@@ -66,11 +80,11 @@ const SignUpComponent = () => {
         <form className="space-y-4" onSubmit={handelSubmit}>
           <div className='flex flex-col gap-4'>
             <div className='flex flex-col sm:flex-row items-center gap-4'>
-              <FormInput onChange={handelChange} type='text' placeholder='First Name' value={formData.firstname} name='firstname' label='First Name' />
-              <FormInput onChange={handelChange} type='text' placeholder='Last Name' value={formData.lastname} name='lastname' label='Last Name' />
+              <FormInput onChange={handelChange} type='text' placeholder='username' value={formData.username} name='username' label='Username' />
             </div>
             <FormInput onChange={handelChange} type='email' placeholder='email' value={formData.email} name='email' label='Gmail' />
             <FormInput onChange={handelChange} type='password' placeholder='password' value={formData.password} name='password' label='Password' />
+            <FormInput onChange={handelChange} className={`${ismatch&&'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'}`} type='cppassword' placeholder='confirm password' value={formData.cppassword} name='cppassword' label='Confirm Password' />
           </div>
           {error && (
             <div className="flex items-center p-3 text-sm rounded-md bg-red-50 border border-red-200">

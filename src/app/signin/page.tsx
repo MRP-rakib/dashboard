@@ -2,7 +2,7 @@
 import { signin } from '@/redux/feature/auth/signinSlice';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { authType } from '@/types/authTypes';
+import { userType } from '@/types/userType';
 import Link from 'next/link';
 import FacebookBtn from '@/utils/FacebookBtn';
 import FormButton from '@/utils/FormButton';
@@ -16,8 +16,8 @@ const SigninComponent = () => {
   const dispatch = useAppDispatch()
   const {message,loading,error} = useAppSelector(state=>state.login)
     const route = useRouter()
-  const [formData,setFormData] = useState<authType>({
-    email:'example@gmail.com',
+  const [formData,setFormData] = useState<userType>({
+    email:'rakib@gmail.com',
     password:'123456'
   })
   const [checked,setChecked] = useState<boolean>(false)
@@ -33,7 +33,6 @@ const handelSubmit=(e:React.FormEvent)=>{
   dispatch(signin({
     email:formData.email,
     password:formData.password,
-    remembar:checked
   }))
  
   if(message){

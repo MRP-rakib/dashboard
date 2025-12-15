@@ -1,12 +1,13 @@
 import API from "@/api/api";
-import { authType } from "@/types/authTypes";
+import { userType } from "@/types/userType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const changepasswordThunk = createAsyncThunk('api/auth/changepassword', async (formData: authType) => {
+export const changepasswordThunk = createAsyncThunk('api/auth/change-password/:id', async (formData: userType) => {
     try {
         const token = localStorage.getItem('token')
+        
         const res = API({
-            endpoint: 'auth/admin/profile',
+            endpoint: `auth/admin/change-password/${formData._id}`,
             option: {
                 method: 'PATCH',
                 headers: {
@@ -39,7 +40,10 @@ const initialState: InitialStateTypes = {
 export const changepasswordSlice = createSlice({
     name: 'changepassword',
     initialState,
-    reducers: {},
+    reducers: {
+    clearUserMessage: state => { state.message = null; state.error = null; state.loading = false }
+
+    },
     extraReducers: builder => {
         builder.addCase(changepasswordThunk.pending, state => { state.loading = true })
         builder.addCase(changepasswordThunk.fulfilled, (state, actions) => { state.loading = false; state.error = null; state.message = actions.payload.message })
@@ -47,5 +51,5 @@ export const changepasswordSlice = createSlice({
     }
 })
 
-
+export const {clearUserMessage} = changepasswordSlice.actions
 export default changepasswordSlice.reducer
