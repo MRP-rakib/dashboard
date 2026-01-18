@@ -10,16 +10,20 @@ import { changepasswordThunk, clearUserMessage } from '@/redux/feature/auth/chan
 import { userType } from '@/types/userType'
 import { clearUserInfo, updateUser } from '@/redux/feature/auth/userDetailsChangeSlice'
 import { deleteAccount } from '@/redux/feature/auth/deleteAccountSlice'
+import Cookies from "js-cookie";
+import API from '@/api/api'
 
 function ProfileView() {
     const { user } = useAppSelector(state => state.profile)
     const changepassword = useAppSelector(state => state.changepassword)
     const changeUserInfo = useAppSelector(state => state.changeUserInfo)
+    const deleteUser = useAppSelector(state=>state.deleteAccount)
     const [dlt, setDlt] = useState<boolean>(false)
     const [isMatch, setIsMatch] = useState(true)
     const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
     const [dltPass,setDltPass] = useState<string>('')
+    const token = localStorage.getItem('token')
     const [form, setForm] = useState<userType>({
         firstname: '',
         lastname: '',
@@ -104,6 +108,74 @@ function ProfileView() {
         }
     }, [changepassword.message, changepassword.error, dispatch])
 
+ const handelDelete = ()=>{
+    dispatch(deleteAccount({_id:user._id,password:dltPass}))
+ }
+ useEffect(()=>{
+  if(deleteUser.message){
+    Cookies.remove('accessToken',{path:'/'})
+    Cookies.remove('refreshToken',{path:'/'})
+    localStorage.removeItem('token')
+    window.location.href = '/signin'
+  }
+ },[deleteUser,dispatch])
+
+ const handleAvatarAutoUpload = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Only image files allowed");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+  try {
+    const res = await API({endpoint:`auth/admin/upload-image/${user._id}`,option:{
+        method:'PUT',
+        credentials:'include',
+        headers:{
+                 'authorization': `Bearer ${token}`
+                },
+        body:formData
+    }
+    
+}
+)
+if(res?.message){
+    window.location.reload();
+}
+    
+  } catch (error) {
+    alert("Image upload failed");
+    throw error
+  } finally {
+    e.target.value = "";
+  }
+};
+
+const handleDeleteAvatar= async()=>{
+     try {
+        const res = await API({
+            endpoint:`auth/admin/delete-image/${user._id}`,
+            option:{
+                method:'DELETE',
+                credentials:'include',
+                headers:{
+                 'authorization': `Bearer ${token}`
+                },
+            }
+        })
+        if (res?.message){
+            window.location.reload()
+        }
+     } catch (error) {
+        throw error
+     }
+}
 
     const avatarSrc = user?.avatar?.url || '/image/profile.jpg'
 
@@ -134,10 +206,10 @@ function ProfileView() {
                                 <label className="flex items-center justify-center gap-2 cursor-pointer w-full px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
                                     <Camera className="w-4 h-4" />
                                     <span className="text-sm">Change Avatar</span>
-                                    <input aria-hidden type="file" accept="image/*" className="hidden" />
+                                    <input aria-hidden onChange={handleAvatarAutoUpload} type="file" accept="image/*" className="hidden" />
                                 </label>
 
-                                <button className="w-full flex items-center cursor-pointer justify-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <button onClick={handleDeleteAvatar} className="w-full flex items-center cursor-pointer justify-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                     <Trash className="w-4 h-4 text-red-500 dark:text-red-400" />
                                     <span className="text-xs sm:text-sm">Delete Avatar</span>
                                 </button>
@@ -224,7 +296,7 @@ function ProfileView() {
                                             <input type="password" name='password' onChange={(e)=>setDltPass(e.target.value)} value={dltPass} placeholder="enter password" className="sm:col-span-3 w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100" />
                                         </div>
                                         <div className='w-full flex gap-2 items-center'>
-                                            <button onClick={()=>dispatch(deleteAccount({_id:user._id,password:dltPass}))} className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Confirm</button>
+                                            <button onClick={handelDelete} className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white rounded-md text-sm cursor-pointer">Confirm</button>
                                             <button onClick={()=>setDlt(false)} className="px-4 py-2 bg-green-600 dark:bg-green-500 text-white rounded-md text-sm cursor-pointer">Cancel</button>
                                         </div>
                                     </div>

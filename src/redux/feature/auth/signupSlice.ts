@@ -2,11 +2,8 @@ import API from "@/api/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { userType } from "@/types/userType";
 
-interface InitialStateTypes {
-    message: string | null,
-    loading: boolean,
-    error: string | null
-}
+
+
 export const signup = createAsyncThunk('auth/admin/register', async (Data: userType) => {
     try {
         const res = await API({
@@ -23,6 +20,11 @@ export const signup = createAsyncThunk('auth/admin/register', async (Data: userT
 
     }
 })
+interface InitialStateTypes {
+    message: string | null,
+    loading: boolean,
+    error: string | null
+}
 
 
 const initialState: InitialStateTypes = {

@@ -18,7 +18,6 @@ export const deleteAccount = createAsyncThunk('api/auth/change-password/:id', as
                 body: JSON.stringify(formData)
             }
         })
-
         return res
     } catch (error) {
         throw error
@@ -47,7 +46,7 @@ export const deleteAccountSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(deleteAccount.pending, state => { state.loading = true })
-        builder.addCase(deleteAccount.fulfilled, (state, actions) => { state.loading = false; state.error = null; state.message = actions.payload.message })
+        builder.addCase(deleteAccount.fulfilled, (state, actions) => { state.loading = false; state.error = null; state.message = actions.payload.message;})
         builder.addCase(deleteAccount.rejected, (state, actions) => { state.loading = false; state.message = null; state.error = actions.error.message || 'password change error' })
     }
 })
