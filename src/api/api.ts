@@ -4,7 +4,7 @@ interface apiProps{
 }
 const API = async({endpoint,option}:apiProps)=>{
        try {
-         const url = `https://hospital-backend-fgmv.onrender.com/api/${endpoint}`
+         const url = `https://hospital-backend-ghsn.onrender.com/api/${endpoint}`
          const res = await fetch(url,option)
          const data = await res.json()
          if(!res.ok){
