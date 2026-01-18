@@ -23,7 +23,6 @@ function ProfileView() {
     const dispatch = useAppDispatch()
     const [editMode, setEditMode] = useState(false)
     const [dltPass,setDltPass] = useState<string>('')
-    const token = localStorage.getItem('token')
     const [form, setForm] = useState<userType>({
         firstname: '',
         lastname: '',
@@ -133,7 +132,9 @@ function ProfileView() {
 
   const formData = new FormData();
   formData.append("image", file);
+  
   try {
+     const token = localStorage.getItem('token')
     const res = await API({endpoint:`auth/admin/upload-image/${user._id}`,option:{
         method:'PUT',
         credentials:'include',
@@ -159,6 +160,7 @@ if(res?.message){
 
 const handleDeleteAvatar= async()=>{
      try {
+         const token = localStorage.getItem('token')
         const res = await API({
             endpoint:`auth/admin/delete-image/${user._id}`,
             option:{
