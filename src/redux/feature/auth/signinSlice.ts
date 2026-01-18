@@ -1,7 +1,7 @@
 import API from "@/api/api";
 import { userType } from "@/types/userType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
+import Cookies from 'js-cookie'
 interface InitialStateTypes {
     message: string | null,
     loading: boolean,
@@ -18,6 +18,8 @@ export const signin = createAsyncThunk('auth/admin/login', async (data: userType
                 credentials:'include'
             }
         })
+        Cookies.set('accessToken',res.accessToken)
+        Cookies.set('refreshToken',res.refreshToken)
         localStorage.setItem('token',res.accessToken)
         return res
     } catch (error) {

@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
  
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const {pathname} = request.nextUrl
     const publicRoutes = ['/signin','/signup']
     if (publicRoutes.includes(pathname)){
         return NextResponse.next()
     }
-    const token = await request.cookies.get('accessToken')?.value
-    console.log(token);
+    const token = request.cookies.get('accessToken')?.value
     
     if(!token){
         return NextResponse.redirect(new URL('/signin',request.url))
