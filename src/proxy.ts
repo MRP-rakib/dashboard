@@ -1,8 +1,8 @@
-// middleware.ts
+
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Public routes
+
 const publicRoutes = ['/signin', '/signup'];
 
 export function proxy(request: NextRequest) {
@@ -13,6 +13,7 @@ export function proxy(request: NextRequest) {
   }
   const token = request.cookies.get('accessToken')?.value;
  
+  console.log(token);
   
 
   if (!token) {
